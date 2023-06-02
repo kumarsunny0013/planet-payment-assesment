@@ -1,4 +1,4 @@
-package com.planet.assesment.repository;
+package com.planet.assesment.repository.enums;
 
 /**
  * ENUM class for Country and its code

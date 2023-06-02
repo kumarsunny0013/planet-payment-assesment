@@ -53,10 +53,31 @@ public class OrderServiceImpl implements OrderService {
         long start = Instant.now().getEpochSecond();
         log.info("Start Time:" + LocalDateTime.now());
         try {
-            List<OrderEntity> orderEntityList = new ArrayList<>();
-            Resource resource = resourceLoader.getResource("classpath:/" + csvFilePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-//        Skip header line
+            List<OrderEntity> orderEntityList = processCSV(csvFilePath);
+
+//        This is taking less time
+            orderRepository.saveAllAndFlush(orderEntityList);
+        } catch (Exception exception) {
+//            log.error(exception.getStackTrace().toString());
+            throw exception;
+        }
+
+        log.info("End Time:" + LocalDateTime.now());
+        long end = Instant.now().getEpochSecond();
+        log.info("Total Time Taken " + (end - start));
+    }
+
+    /**
+     * Reads the CSV file and create list of OrderEntity
+     * @param csvFilePath
+     * @throws IOException
+     */
+    private List<OrderEntity> processCSV(String csvFilePath) throws IOException {
+        List<OrderEntity> orderEntityList = new ArrayList<>();
+//        Resource resource = resourceLoader.getResource("classpath:/" + csvFilePath);
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            //      Skip header line
             reader.readLine();
             String line;
             //read line by line and create orderEntity Object
@@ -73,16 +94,9 @@ public class OrderServiceImpl implements OrderService {
 //            This takes more time
 //            orderRepository.save(orderEntity);
             }
-//        This is taking less time
-            orderRepository.saveAllAndFlush(orderEntityList);
-        } catch (Exception exception) {
-//            log.error(exception.getStackTrace().toString());
-            throw exception;
         }
 
-        log.info("End Time:" + LocalDateTime.now());
-        long end = Instant.now().getEpochSecond();
-        log.info("Total Time Taken " + (end - start));
+        return  orderEntityList;
     }
 
     /**

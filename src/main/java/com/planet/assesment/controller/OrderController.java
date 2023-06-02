@@ -18,7 +18,7 @@ public class OrderController {
     @GetMapping("/v1/orders")
     private ResponseEntity<String> saveOrders() throws IOException {
         try {
-            orderService.saveOrders("test_file_2.csv");
+            orderService.saveOrders("src/main/resources/test_file_2.csv");
         } catch (Exception exception) {
             // Just added for simplicity. We generally use Global Exception Handler for handling exception globally.
             return ResponseEntity.internalServerError().body("FAILED");
