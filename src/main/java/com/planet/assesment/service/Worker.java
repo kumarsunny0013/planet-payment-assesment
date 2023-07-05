@@ -3,9 +3,11 @@ package com.planet.assesment.service;
 import com.planet.assesment.repository.OrderEntity;
 import com.planet.assesment.repository.OrderRepository;
 import com.planet.assesment.utility.OrderUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.BlockingQueue;
 
+@Slf4j
 public class Worker implements Runnable {
     private final BlockingQueue<String> queue;
     private final OrderRepository orderRepository;
@@ -33,6 +35,9 @@ public class Worker implements Runnable {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        } catch (Exception exception) {
+            log.error("Some exception occurred while saving data", exception.getStackTrace());
+            throw exception;
         }
     }
 }

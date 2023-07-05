@@ -41,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Below code is without multithreading. Added Async in method so that when we hit the api doesnt hold the thread . As execution will take time as it need to save 1M records
+     *
      * @param csvFilePath
      * @throws IOException
      */
@@ -55,11 +56,10 @@ public class OrderServiceImpl implements OrderService {
 
 //        This is taking less time
             orderRepository.saveAllAndFlush(orderEntityList);
-        } catch (IOException ioException){
+        } catch (IOException ioException) {
             log.error("Exception while reading the file");
             throw ioException;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
 //            log.error(exception.getStackTrace().toString());
             throw exception;
         }
@@ -71,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Reads the CSV file and create list of OrderEntity
+     *
      * @param csvFilePath
      * @throws IOException
      */
@@ -98,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return  orderEntityList;
+        return orderEntityList;
     }
 
     /**
