@@ -33,4 +33,12 @@ class OrderServiceImplTest {
         Assertions.assertEquals(4, value);
     }
 
+    @Test
+    public void test_processCSV_throwsExceptionWhenFileNotFound() throws IOException {
+        // this csv have 4 records
+        String filePath = "src/main/resources/testError.csv";
+        Assertions.assertThrows(IOException.class,()->{
+            orderService.saveOrders(filePath);
+        });
+    }
 }

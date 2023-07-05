@@ -5,7 +5,6 @@ import com.planet.assesment.repository.OrderRepository;
 import com.planet.assesment.utility.OrderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,7 +55,11 @@ public class OrderServiceImpl implements OrderService {
 
 //        This is taking less time
             orderRepository.saveAllAndFlush(orderEntityList);
-        } catch (Exception exception) {
+        } catch (IOException ioException){
+            log.error("Exception while reading the file");
+            throw ioException;
+        }
+        catch (Exception exception) {
 //            log.error(exception.getStackTrace().toString());
             throw exception;
         }
